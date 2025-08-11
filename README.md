@@ -9,6 +9,22 @@ This script replaces the outdated METAR-fetching logic, supplying fresh and more
 
 ---
 
+## USAGE
+
+Follow this guide to set up your RPi.
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable startup.service
+sudo systemctl start startup.service
+```
+
+If you need to stop the service while doing maintenance, use
+```bash 
+sudo systemctl stop startup.service
+```
+
+
 ## How It Works
 
 1. **Airport Selection**

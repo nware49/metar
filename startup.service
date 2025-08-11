@@ -1,0 +1,14 @@
+[Unit]
+Description=Metar Map Startup
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi
+ExecStart=/usr/bin/sudo /home/pi/venvs/bin/python /home/pi/metar/metar_map.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

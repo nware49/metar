@@ -254,30 +254,64 @@ def main():
         'KVSF',  # VSF – Hartness State (Springfield) Airport
     ]
 
-    airports = [
-        'KCLT',  # Charlotte Douglas International Airport
-        'KEQY',  # Charlotte-Monroe Executive Airport
-        'KJQF',  # Concord-Padgett Regional Airport
-        'KRUQ',  # Mid-Carolina Regional Airport (Salisbury)
-        'KAKH',  # Gastonia Municipal Airport
-        'KIPJ',  # Lincolnton-Lincoln County Regional Airport
-        'KMRN',  # Foothills Regional Airport (Morganton)
-        'KVUJ',  # Stanly County Airport (Albemarle)
-        'KAFP',  # Anson County Airport (Wadesboro)
-        'KSRW',  # Rowan County Airport
-        'KEHO',  # Shelby-Cleveland County Regional Airport
-        'KRCZ',  # Rockingham-Hamlet Airport
-        'KASN',  # Anson County Airport (duplicate name used elsewhere)
-        'KHBI',  # Asheboro Regional Airport
-        'KLKR',  # Lancaster County Airport (McWhirter Field)
-        'KUDG',  # Darlington County Jetport
-        'KCQW',  # Cheraw Municipal Airport
-        'KIXA',  # Halifax-Northampton Regional Airport
-        'KIPF',  # Pecan Plantation Airport (note: far small field)
-        'KEXX',  # Davidson County Airport (Lexington, NC)
-    ]
+    # airports = [
+    #     'KCLT',  # Charlotte Douglas International Airport
+    #     'KEQY',  # Charlotte-Monroe Executive Airport
+    #     'KJQF',  # Concord-Padgett Regional Airport
+    #     'KRUQ',  # Mid-Carolina Regional Airport (Salisbury)
+    #     'KAKH',  # Gastonia Municipal Airport
+    #     'KIPJ',  # Lincolnton-Lincoln County Regional Airport
+    #     'KMRN',  # Foothills Regional Airport (Morganton)
+    #     'KVUJ',  # Stanly County Airport (Albemarle)
+    #     'KAFP',  # Anson County Airport (Wadesboro)
+    #     'KSRW',  # Rowan County Airport
+    #     'KEHO',  # Shelby-Cleveland County Regional Airport
+    #     'KRCZ',  # Rockingham-Hamlet Airport
+    #     'KASN',  # Anson County Airport (duplicate name used elsewhere)
+    #     'KHBI',  # Asheboro Regional Airport
+    #     'KLKR',  # Lancaster County Airport (McWhirter Field)
+    #     'KUDG',  # Darlington County Jetport
+    #     'KCQW',  # Cheraw Municipal Airport
+    #     'KIXA',  # Halifax-Northampton Regional Airport
+    #     'KIPF',  # Pecan Plantation Airport (note: far small field)
+    #     'KEXX',  # Davidson County Airport (Lexington, NC)
+    # ]
 
-    # You can also get airports from command line arguments
+    airports = [
+        'KPOU',  # Poughkeepsie, NY
+        'KDXR',  # Danbury, CT
+        'KHVN',  # New Haven, CT
+        'KGON',  # Groton-New London, CT
+        'KBID',  # Block Island, RI
+        'KMVY',  # Martha's Vineyard, MA
+        'KHYA',  # Hyannis, MA
+        'KACK',  # Nantucket, MA
+        'KPVC',  # Provincetown, MA
+        'KPYM',  # Plymouth, MA
+        'KEWB',  # New Bedford, MA
+        'KPVD',  # Providence, RI
+        'KIJD',  # Windham, CT
+        'KBDL',  # Bradley Intl, CT
+        'KBAF',  # Westfield-Barnes, MA
+        'KCEF',  # Chicopee Falls, MA
+        'KAQW',  # Whitman, NY
+        'KPSF',  # Pittsfield, MA
+        'KALB',  # Albany, NY
+        'KGFL',  # Glens Falls, NY
+        'KVSF',  # Springfield, VT
+        'KEEN',  # Keene, NH
+        'KORE',  # Orange, MA
+        'KORH',  # Worcester, MA
+        'KFIT',  # Fitchburg, MA
+        'KASH',  # Nashua, NH
+        'KCON',  # Concord, NH
+        'KLCI',  # Laconia, NH
+        'KSFM',  # Sanford, ME
+        'KPSM',  # Portsmouth, NH
+        'KBED',  # Bedford, MA
+        'KBOS',  # Boston Logan, MA
+        'KOWD',  # Norwood, MA
+    ]    # You can also get airports from command line arguments
     if len(sys.argv) > 1:
         airports = [arg.upper() for arg in sys.argv[1:]]
 
