@@ -13,6 +13,41 @@ This script replaces the outdated METAR-fetching logic, supplying fresh and more
 
 Follow this guide to set up your RPi.
 
+### Hardware
+
+| NeoPixel Wire  | Connect to Pi                          |
+| -------------- | -------------------------------------- |
+| **DIN (data)** | GPIO18 (pin 12) — hardware PWM-capable |
+| **5V**         | Pi 5V (pin 2 or 4)                     |
+| **GND**        | Pi GND (pin 6, 9, 14, etc.)            |
+
+Can use these for pin help:
+https://raspberrypi.stackexchange.com/questions/83610/gpio-pinout-orientation-raspberypi-zero-w
+
+https://www.etechnophiles.com/raspberry-pi-zero-gpio-pinout-specifications-programming-language/
+
+Raspberry Pi Zero W needs to have an SD card with the OS set up. https://www.raspberrypi.com/software/ I used this tutorial
+
+https://microdigisoft.com/getting-started-with-raspberry-pi-zero-w-connect-with-ssh/
+
+Helps to use AngryIPScanner to find Raspberry Pi IP Address.
+https://angryip.org/
+
+Just follow the tutorial to set up WiFi access on the Raspberry Pi.
+
+### Libraries
+
+Create a virtual environment, activate it. I used "venvs"
+
+```bash
+sudo pip3 install rpi_ws281x adafruit-circuitpython-neopixel
+sudo python3 -m pip install --force-reinstall adafruit-blinka
+```
+
+Copy the `metar_map_ne.py` file onto your Raspberry Pi.
+
+To start the service, copy the startup.service file to 
+
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl enable startup.service
@@ -24,7 +59,7 @@ If you need to stop the service while doing maintenance, use
 sudo systemctl stop startup.service
 ```
 
-
+# Data Scraping Overview
 ## How It Works
 
 1. **Airport Selection**
