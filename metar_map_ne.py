@@ -64,7 +64,7 @@ class WeatherMap:
         self.colors = {
             'VFR': (255, 0, 0),  # Green
             'MVFR': (0, 0, 255),  # Blue
-            'IFR': (255, 255, 0),  # Yellow
+            'IFR': (0, 255, 0),  # Red
             'LIFR': (0, 255, 255),  # Magenta
             'UNKNOWN': (64, 64, 64)  # Dim white for errors
         }
@@ -307,4 +307,5 @@ def main():
 
 
 if __name__ == "__main__":
+    time.sleep(30)
     main()
