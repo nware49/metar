@@ -2,7 +2,7 @@
 """
 Simple Aviation Weather Map using NeoPixel library
 Displays flight categories on NeoPixel LEDs using aviationweather.gov API
-This is the New England version
+This is the Southeast version
 """
 
 import requests
@@ -22,51 +22,49 @@ class WeatherMap:
         # Initialize NeoPixel strip
         self.pixels = neopixel.NeoPixel(board.D18, led_count, brightness=0.3, auto_write=False)
 
-        # Airport to LED mapping - modify these based on your physical layout
+        # Airport to LED mapping - Southeast airports from jakecam file
         self.airport_mapping = {
-            'KPOU': 0,  # Poughkeepsie, NY
-            'KDXR': 2,  # Danbury, CT
-            'KHVN': 3,  # New Haven, CT
-            'KGON': 5,  # Groton-New London, CT
-            'KBID': 6,  # Block Island, RI
-            'KMVY': 8,  # Martha's Vineyard, MA
-            'KHYA': 9,  # Hyannis, MA
-            'KACK': 10,  # Nantucket, MA
-            'KPVC': 12,  # Provincetown, MA
-            'KPYM': 13,  # Plymouth, MA
-            'KEWB': 14,  # New Bedford, MA
-            'KPVD': 15,  # Providence, RI
-            'KIJD': 17,  # Windham, CT
-            'KBDL': 18,  # Bradley Intl, CT
-            'KBAF': 19,  # Westfield-Barnes, MA
-            'KCEF': 20,  # Chicopee Falls, MA
-            'KAQW': 22,  # Whitman, NY
-            'KPSF': 23,  # Pittsfield, MA
-            'KALB': 25,  # Albany, NY
-            'KGFL': 27,  # Glens Falls, NY
-            'KVSF': 29,  # Springfield, VT
-            'KEEN': 30,  # Keene, NH
-            'KORE': 31,  # Orange, MA
-            'KORH': 32,  # Worcester, MA
-            'KFIT': 33,  # Fitchburg, MA
-            'KASH': 34,  # Nashua, NH
-            'KCON': 35,  # Concord, NH
-            'KLCI': 37,  # Laconia, NH
-            'KSFM': 39,  # Sanford, ME
-            'KPSM': 40,  # Portsmouth, NH
-            'KBED': 42,  # Bedford, MA
-            'KBOS': 43,  # Boston Logan, MA
-            'KOWD': 44,  # Norwood, MA
+            'KMXF': 0,   # Maxwell AFB, AL
+            'KALX': 2,   # Thomas C. Russell Field, AL
+            'KAUO': 3,   # Auburn University Regional, AL
+            'KCSG': 4,   # Columbus, GA
+            'KLGC': 6,   # LaGrange-Callaway, GA
+            'KCCO': 7,   # Newnan-Coweta County, GA
+            'KCTJ': 8,   # West Georgia Regional, GA
+            'KCNI': 10,  # Cherokee County, SC
+            'KRYY': 11,  # Cobb County-McCollum Field, GA
+            'KATL': 12,  # Hartsfield-Jackson Atlanta Intl, GA
+            'KHMP': 13,  # Hampton-Varnville, SC
+            'K6A2': 14,  # Griffin-Spalding County, GA
+            'KOPN': 15,  # Thomasville-Regional, GA
+            'K6A1': 16,  # Moultrie Municipal, GA
+            'KWRB': 18,  # Robins AFB, GA
+            'KDBN': 19,  # W.H. 'Bud' Barron, GA
+            'KSBO': 20,  # Saluda County, SC
+            'KHQU': 22,  # Thomson-McDuffie County, GA
+            'KMLJ': 24,  # Baldwin County, GA
+            'KCVC': 26,  # Covington Municipal, GA
+            'KLZU': 27,  # Gwinnett County-Briscoe Field, GA
+            'KAHN': 28,  # Athens-Ben Epps, GA
+            '18AA': 29,  # Preston Area Community, GA
+            'KGMU': 31,  # Gainesville Regional, GA
+            'KCEU': 33,  # Clemson-Oconee County, SC
+            'KAJR': 35,  # Habersham County, GA
+            'KDZJ': 36,  # Blairsville, GA
+            'KDNN': 38,  # Dalton Regional, GA
+            'KRMG': 40,  # Richard B. Russell Regional, GA
+            'K4A6': 42,  # Toccoa-R.G. LeTourneau Field, GA
+            'KGAD': 44,  # Gadsden Municipal, AL
+            'KASN': 45,  # Talladega Municipal, AL
         }
 
-        # Wrong: Color mapping for flight categories (R, G, B)
-        # Color mapping for flight categories (G, R, B)
+        # Color mapping for flight categories (G, R, B) - corrected from original
         self.colors = {
-            'VFR': (255, 0, 0),  # Green
-            'MVFR': (0, 0, 255),  # Blue
-            'IFR': (0, 255, 0),  # Red
+            'VFR': (255, 0, 0),     # Green
+            'MVFR': (0, 0, 255),    # Blue
+            'IFR': (0, 255, 0),     # Red
             'LIFR': (0, 255, 255),  # Magenta
-            'UNKNOWN': (64, 64, 64)  # Dim white for errors
+            'UNKNOWN': (64, 64, 64) # Dim white for errors
         }
 
     def startup_sequence(self):
@@ -240,7 +238,7 @@ class WeatherMap:
 
     def run_continuous(self, update_interval_minutes=5):
         """Run continuous weather monitoring loop"""
-        print("Starting NeoPixel Weather Map")
+        print("Starting NeoPixel Weather Map - Southeast Version")
         print(f"Monitoring {len(self.airport_mapping)} airports")
         print(f"Update interval: {update_interval_minutes} minutes")
 
@@ -284,7 +282,7 @@ def main():
     """Main function"""
     import argparse
 
-    parser = argparse.ArgumentParser(description='Aviation Weather Map')
+    parser = argparse.ArgumentParser(description='Aviation Weather Map - Southeast')
     parser.add_argument('--led-count', type=int, default=50,
                         help='Number of LEDs')
     parser.add_argument('--update-interval', type=int, default=5,
@@ -303,7 +301,7 @@ def main():
         print("\nProgram interrupted by user")
     except Exception as e:
         print(f"Error: {e}")
-        print("Make sure to run with: sudo /path/to/venv/bin/python weather_map.py")
+        print("Make sure to run with: sudo /path/to/venv/bin/python metar_map_se.py")
 
 
 if __name__ == "__main__":
