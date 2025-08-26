@@ -2,7 +2,7 @@
 """
 Simple Aviation Weather Map using NeoPixel library
 Displays flight categories on NeoPixel LEDs using aviationweather.gov API
-This is the Southeast version
+This is the Southeast version with WiFi connectivity monitoring
 """
 
 import requests
@@ -10,6 +10,8 @@ import json
 import time
 import board
 import neopixel
+import subprocess
+import socket
 from typing import Dict, List, Optional
 
 
@@ -64,8 +66,71 @@ class WeatherMap:
             'MVFR': (0, 0, 255),    # Blue
             'IFR': (0, 255, 0),     # Red
             'LIFR': (0, 255, 255),  # Magenta
-            'UNKNOWN': (64, 64, 64) # Dim white for errors
+            'UNKNOWN': (64, 64, 64), # Dim white for errors
+            'WIFI_ERROR': (0, 255, 0)  # Red for WiFi errors
         }
+
+        # WiFi connectivity tracking
+        self.wifi_connected = True
+        self.consecutive_failures = 0
+        self.max_failures_before_flash = 2
+
+    def check_wifi_connectivity(self) -> bool:
+        """
+        Check WiFi connectivity using multiple methods
+        Returns True if connected, False otherwise
+        """
+        # Method 1: Check if we can reach a reliable DNS server
+        try:
+            socket.create_connection(("8.8.8.8", 53), timeout=5)
+            return True
+        except (socket.timeout, OSError):
+            pass
+
+        # Method 2: Try to reach the weather API host
+        try:
+            socket.create_connection(("aviationweather.gov", 443), timeout=5)
+            return True
+        except (socket.timeout, OSError):
+            pass
+
+        # Method 3: Check wireless interface status (Linux specific)
+        try:
+            result = subprocess.run(['iwconfig'], capture_output=True, text=True, timeout=5)
+            if 'ESSID:' in result.stdout and 'off/any' not in result.stdout:
+                # Interface shows connected to a network, but network might not have internet
+                # This method is less reliable, so we only use it as a last resort
+                return True
+        except (subprocess.TimeoutExpired, FileNotFoundError):
+            pass
+
+        return False
+
+    def flash_wifi_error(self, duration_seconds=10):
+        """
+        Flash all LEDs red to indicate WiFi connectivity issues
+        
+        Args:
+            duration_seconds: How long to flash the LEDs
+        """
+        print("WiFi connectivity lost - flashing red warning...")
+        
+        flash_cycles = duration_seconds * 2  # 2 flashes per second
+        
+        for i in range(flash_cycles):
+            if i % 2 == 0:
+                # Turn on red
+                self.pixels.fill(self.colors['WIFI_ERROR'])
+            else:
+                # Turn off
+                self.pixels.fill((0, 0, 0))
+            
+            self.pixels.show()
+            time.sleep(0.5)
+        
+        # Clear LEDs after flashing
+        self.pixels.fill((0, 0, 0))
+        self.pixels.show()
 
     def startup_sequence(self):
         """Run LED startup sequence to test all colors"""
@@ -226,6 +291,10 @@ class WeatherMap:
         """Print current status"""
         print(f"\n=== Weather Update #{loop_count} ===")
         print(f"Time: {time.strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"WiFi Status: {'Connected' if self.wifi_connected else 'Disconnected'}")
+        
+        if not self.wifi_connected:
+            print(f"Consecutive failures: {self.consecutive_failures}")
 
         # Count categories
         categories = {}
@@ -236,11 +305,18 @@ class WeatherMap:
         print(f"Flight Categories: {dict(categories)}")
         print(f"Total airports: {len(weather_data)}")
 
-    def run_continuous(self, update_interval_minutes=5):
-        """Run continuous weather monitoring loop"""
+    def run_continuous(self, update_interval_minutes=5, wifi_check_enabled=True):
+        """
+        Run continuous weather monitoring loop
+        
+        Args:
+            update_interval_minutes: Minutes between weather updates
+            wifi_check_enabled: Whether to check WiFi connectivity
+        """
         print("Starting NeoPixel Weather Map - Southeast Version")
         print(f"Monitoring {len(self.airport_mapping)} airports")
         print(f"Update interval: {update_interval_minutes} minutes")
+        print(f"WiFi monitoring: {'Enabled' if wifi_check_enabled else 'Disabled'}")
 
         # Run startup sequence
         self.startup_sequence()
@@ -250,6 +326,25 @@ class WeatherMap:
         try:
             while True:
                 loop_count += 1
+
+                # Check WiFi connectivity if enabled
+                if wifi_check_enabled:
+                    print("Checking WiFi connectivity...")
+                    self.wifi_connected = self.check_wifi_connectivity()
+                    
+                    if not self.wifi_connected:
+                        self.consecutive_failures += 1
+                        print(f"WiFi connectivity check failed (attempt {self.consecutive_failures})")
+                        
+                        if self.consecutive_failures >= self.max_failures_before_flash:
+                            self.flash_wifi_error(duration_seconds=10)
+                            print("Waiting 30 seconds before retrying...")
+                            time.sleep(30)
+                            continue
+                    else:
+                        if self.consecutive_failures > 0:
+                            print("WiFi connectivity restored!")
+                        self.consecutive_failures = 0
 
                 # Get all airport codes
                 airports = list(self.airport_mapping.keys())
@@ -287,6 +382,8 @@ def main():
                         help='Number of LEDs')
     parser.add_argument('--update-interval', type=int, default=5,
                         help='Update interval in minutes')
+    parser.add_argument('--disable-wifi-check', action='store_true',
+                        help='Disable WiFi connectivity monitoring')
 
     args = parser.parse_args()
 
@@ -295,7 +392,10 @@ def main():
         weather_map = WeatherMap(args.led_count)
 
         # Run continuous monitoring
-        weather_map.run_continuous(update_interval_minutes=args.update_interval)
+        weather_map.run_continuous(
+            update_interval_minutes=args.update_interval,
+            wifi_check_enabled=not args.disable_wifi_check
+        )
 
     except KeyboardInterrupt:
         print("\nProgram interrupted by user")
