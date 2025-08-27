@@ -1,6 +1,6 @@
 [Unit]
 Description=Metar Map Startup
-After=network.target
+After=multi-user.target
 
 [Service]
 Type=simple

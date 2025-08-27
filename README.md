@@ -21,6 +21,11 @@ Follow this guide to set up your RPi.
 | **5V**         | Pi 5V (pin 2 or 4)                     |
 | **GND**        | Pi GND (pin 6, 9, 14, etc.)            |
 
+Colors: 
+Red - 5V
+White - Data
+Blue - GND
+
 Can use these for pin help:
 https://raspberrypi.stackexchange.com/questions/83610/gpio-pinout-orientation-raspberypi-zero-w
 
@@ -35,18 +40,52 @@ https://angryip.org/
 
 Just follow the tutorial to set up WiFi access on the Raspberry Pi.
 
+Came up on pi@192.168.86.45 for paul's and pi@192.168.86.44 for jeff's on Pilots - Click Here
+
+once ssh'd in, to do network config stuff:
+
+`sudo nmtui`
+
+```bash
+nmcli connection modify "Hotspot"  connection.autoconnect yes
+nmcli connection modify "Hotspot"  connection.autoconnect-priority 1
+```
+
+
 ### Libraries
 
 Create a virtual environment, activate it. I used "venvs"
-
 ```bash
+mkdir ~/venvs
+python -m venv venvs
+```
+Activate the virtual environment with 
+```bash
+source venvs/bin/activate
+```
+Install the necessary libraries
+```bash
+pip3 install RPi.GPIO rpi_ws281x adafruit-circuitpython-neopixel
+```
+Deactivate the virtual environment and run your script
+```bash
+deactivate
+sudo ../venvs/bin/python metar_map_se.py
+```
+
+Install these libraries in the virtual environment
+```bash
+sudo apt-get upgrade pip
 sudo pip3 install rpi_ws281x adafruit-circuitpython-neopixel
 sudo python3 -m pip install --force-reinstall adafruit-blinka
 ```
 
+
 Copy the `metar_map_ne.py` file onto your Raspberry Pi.
 
-To start the service, copy the startup.service file to 
+To start the service, copy the startup.service file to this file 
+
+`sudo nano /etc/systemd/system/startup.service`
 
 ```bash
 sudo systemctl daemon-reload
@@ -57,7 +96,30 @@ sudo systemctl start startup.service
 If you need to stop the service while doing maintenance, use
 ```bash 
 sudo systemctl stop startup.service
+sudo systemctl disable startup.service
 ```
+
+
+# How to Fix?
+
+(venvs) pi@raspberrypi:~/metar $ sudo pip3 install rpi_ws281x adafruit-circuitpython-neopixel
+error: externally-managed-environment
+
+× This environment is externally managed
+╰─> To install Python packages system-wide, try apt install
+    python3-xyz, where xyz is the package you are trying to
+    install.
+
+    If you wish to install a non-Debian-packaged Python package,
+    create a virtual environment using python3 -m venv path/to/venv.
+    Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make
+    sure you have python3-full installed.
+
+    For more information visit http://rptl.io/venv
+
+note: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.
+hint: See PEP 668 for the detailed specification.
+
 
 # Data Scraping Overview
 ## How It Works
