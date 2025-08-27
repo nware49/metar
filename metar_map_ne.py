@@ -12,7 +12,6 @@ import board
 import neopixel
 from typing import Dict, List, Optional
 
-
 class WeatherMap:
     def __init__(self, led_count=50):
         """Initialize the weather map with NeoPixel configuration"""
@@ -59,8 +58,8 @@ class WeatherMap:
             'KOWD': 44,  # Norwood, MA
         }
 
-        # Wrong: Color mapping for flight categories (R, G, B)
         # Color mapping for flight categories (G, R, B)
+        # Wrong: Color mapping for flight categories (R, G, B)
         self.colors = {
             'VFR': (255, 0, 0),  # Green
             'MVFR': (0, 0, 255),  # Blue
@@ -238,7 +237,7 @@ class WeatherMap:
         print(f"Flight Categories: {dict(categories)}")
         print(f"Total airports: {len(weather_data)}")
 
-    def run_continuous(self, update_interval_minutes=5):
+    def run_continuous(self, update_interval_minutes=1):
         """Run continuous weather monitoring loop"""
         print("Starting NeoPixel Weather Map")
         print(f"Monitoring {len(self.airport_mapping)} airports")
@@ -287,7 +286,7 @@ def main():
     parser = argparse.ArgumentParser(description='Aviation Weather Map')
     parser.add_argument('--led-count', type=int, default=50,
                         help='Number of LEDs')
-    parser.add_argument('--update-interval', type=int, default=5,
+    parser.add_argument('--update-interval', type=int, default=1,
                         help='Update interval in minutes')
 
     args = parser.parse_args()
@@ -303,7 +302,7 @@ def main():
         print("\nProgram interrupted by user")
     except Exception as e:
         print(f"Error: {e}")
-        print("Make sure to run with: sudo /path/to/venv/bin/python weather_map.py")
+        print("Make sure to run with: sudo /path/to/venv/bin/python metar_map.py")
 
 
 if __name__ == "__main__":
