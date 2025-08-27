@@ -46,6 +46,8 @@ once ssh'd in, to do network config stuff:
 
 `sudo nmtui`
 
+
+in command line you can do this
 ```bash
 nmcli connection modify "Hotspot"  connection.autoconnect yes
 nmcli connection modify "Hotspot"  connection.autoconnect-priority 1
@@ -73,13 +75,14 @@ deactivate
 sudo ../venvs/bin/python metar_map_se.py
 ```
 
+###OBSOLETE
 Install these libraries in the virtual environment
 ```bash
 sudo apt-get upgrade pip
 sudo pip3 install rpi_ws281x adafruit-circuitpython-neopixel
 sudo python3 -m pip install --force-reinstall adafruit-blinka
 ```
-
+###OBSOLETE
 
 Copy the `metar_map_ne.py` file onto your Raspberry Pi.
 
@@ -120,6 +123,7 @@ error: externally-managed-environment
 note: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.
 hint: See PEP 668 for the detailed specification.
 
+This was fixed with the proper creation of a venv
 
 # Data Scraping Overview
 ## How It Works
